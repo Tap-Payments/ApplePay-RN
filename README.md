@@ -17,7 +17,7 @@ ApplePay-RN provides a complete React Native wrapper around the native Apple Pay
 
 ## Requirements
 
-- **React Native**: 0.60+
+- **React Native**: 0.78+
 - **iOS**: 16.0+ (minimum deployment target)
 - **Xcode**: 14.0+
 - **CocoaPods**: For iOS dependency management
@@ -53,7 +53,7 @@ cd ..
 ### 1. Import the Component
 
 ```typescript
-import ApplePayView from '@tap-payments/applepay-rn';
+import { TapApplePay, type ApplePayConfiguration } from 'applepay-rn';
 ```
 
 ### 2. Create Configuration
@@ -61,12 +61,12 @@ import ApplePayView from '@tap-payments/applepay-rn';
 Define your payment configuration:
 
 ```typescript
-const applePayConfig = {
+const configuration: ApplePayConfiguration = {
   // REQUIRED
-  publicKey: "pk_test_********",
+  publicKey: "pk_test_******",
   scope: "AppleToken",
   merchant: {
-    id: "********"
+    id: "**********"
   },
   
   // OPTIONAL
@@ -83,7 +83,8 @@ const applePayConfig = {
       {
         lang: "en",
         first: "John",
-        last: "Smith"
+        last: "Smith",
+        middle: "David"
       }
     ],
     contact: {
@@ -112,20 +113,38 @@ const applePayConfig = {
 ### 3. Use the Component
 
 ```typescript
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
-import ApplePayView from '@tap-payments/applepay-rn';
+import { TapApplePay, type ApplePayConfiguration } from 'applepay-rn';
 
 const App = () => {
+  const handleReady = useCallback(() => {
+    console.log('Apple Pay ready');
+  }, []);
+
+  const handleSuccess = useCallback((data: string) => {
+    console.log('Payment successful:', data);
+  }, []);
+
+  const handleError = useCallback((error: string) => {
+    console.log('Payment error:', error);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    console.log('Payment canceled');
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ApplePayView
-        config={applePayConfig}
-        onReady={() => console.log('Apple Pay ready')}
+      <TapApplePay
+        configuration={configuration}
+        onReady={handleReady}
         onClick={() => console.log('Button clicked')}
-        onSuccess={(data) => console.log('Payment successful:', data)}
-        onError={(error) => console.log('Payment error:', error)}
-        onCanceled={() => console.log('Payment canceled')}
+        onSuccess={handleSuccess}
+        onError={handleError}
+        onCancel={handleCancel}
+        onChargeCreated={(data) => console.log('Charge created:', data)}
+        onOrderCreated={(data) => console.log('Order created:', data)}
         onMerchantValidation={(data) => console.log('Merchant validation:', data)}
         style={styles.applePayButton}
       />
@@ -140,7 +159,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   applePayButton: {
-    height: 50,
+    height: 100,
   },
 });
 
@@ -292,12 +311,15 @@ const features = {
 
 ## Component Props
 
-### ApplePayView Props
+### TapApplePay Props
 
 ```typescript
-interface ApplePayViewProps {
+interface TapApplePayProps {
   // Payment configuration object (required)
-  config: ApplePayConfig;
+  configuration: ApplePayConfiguration;
+  
+  // View style props (optional)
+  style?: StyleProp<ViewStyle>;
   
   // Callback when Apple Pay view is ready
   onReady?: () => void;
@@ -308,23 +330,20 @@ interface ApplePayViewProps {
   // Callback when payment succeeds
   onSuccess?: (data: string) => void;
   
-  // Callback when payment fails
-  onError?: (data: string) => void;
-  
-  // Callback when user cancels payment
-  onCanceled?: () => void;
-  
-  // Callback for merchant validation
-  onMerchantValidation?: (data: string) => void;
+  // Callback when charge is created
+  onChargeCreated?: (data: string) => void;
   
   // Callback when order is created
   onOrderCreated?: (data: string) => void;
   
-  // Callback when charge is created
-  onChargeCreated?: (data: string) => void;
+  // Callback when user cancels payment
+  onCancel?: () => void;
   
-  // View style props (optional)
-  style?: StyleProp<ViewStyle>;
+  // Callback when payment fails
+  onError?: (error: string) => void;
+  
+  // Callback for merchant validation
+  onMerchantValidation?: (data: string) => void;
 }
 ```
 
@@ -352,10 +371,7 @@ interface ApplePayViewProps {
 
 ```json
 {
-  "error": {
-    "code": "PAYMENT_FAILED",
-    "message": "The payment could not be processed"
-  }
+  "error": "Payment processing failed"
 }
 ```
 
@@ -453,22 +469,29 @@ const handleError = (errorData: string) => {
 
 A complete example application is included in the `example` folder demonstrating:
 
-- Basic Apple Pay integration
-- Configuration management
-- Real-time event logging
-- Multiple payment scenarios
-- Error handling
+- Basic Apple Pay integration with configuration management
+- Multiple screens: MainScreen (overview), SimpleScreen (minimal example), SettingsScreen (dynamic configuration)
+- Real-time event logging and console output
+- Multiple payment scenarios (one-time, recurring, shipping options)
+- Error handling and success callbacks
+- Standalone example component (`StandaloneSimpleExample`) for quick copy-paste integration
 
-Run the example app:
+### Running the Example App
+
+Navigate to the example directory and run:
 
 ```bash
-cd example
-npm install
-cd ios
-pod install
-cd ..
-npm run ios
+yarn 
+yarn example ios
 ```
+
+
+### Example Screens
+
+1. **MainScreen** - Main navigation and quick test
+2. **SimpleScreen** - Minimal implementation example
+3. **SettingsScreen** - Dynamic configuration editor
+4. **StandaloneSimpleExample** - Fully self-contained component (copy-paste ready)
 
 ## Native Dependency
 
@@ -533,7 +556,7 @@ We welcome contributions! Please feel free to submit pull requests with bug fixe
 
 ## Version History
 
-### 0.0.1
+### 0.0.3
 - Initial release
 - React Native bridge to Apple Pay iOS
 - TypeScript support
