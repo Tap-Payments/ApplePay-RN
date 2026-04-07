@@ -1,8 +1,8 @@
 #import <React/RCTViewComponentView.h>
 #import <UIKit/UIKit.h>
 
-#ifndef ApplepayRnViewNativeComponent_h
-#define ApplepayRnViewNativeComponent_h
+#ifndef ApplepayRnView_h
+#define ApplepayRnView_h
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -11,4 +11,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#endif /* ApplepayRnViewNativeComponent_h */
+#endif /* ApplepayRnView_h */

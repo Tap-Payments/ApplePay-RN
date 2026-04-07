@@ -1,23 +1,62 @@
-import { View, StyleSheet } from 'react-native';
-import { ApplepayRnView } from 'applepay-rn';
+import { useState, useCallback } from 'react';
+import type { ApplePayConfiguration } from 'applepay-rn';
+import { MainScreen } from './MainScreen';
+import { SimpleScreen } from './SimpleScreen';
+import { SuccessScreen } from './SuccessScreen';
+import { SettingsScreen } from './SettingsScreen';
+import { DEFAULT_CONFIG } from './constants';
+import { prettyJSON } from './helpers';
+import type { Screen } from './types';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Root
+// ─────────────────────────────────────────────────────────────────────────────
 
 export default function App() {
+  const [screen, setScreen] = useState<Screen>('main');
+  const [config, setConfig] = useState<ApplePayConfiguration>(DEFAULT_CONFIG);
+  const [successResult, setSuccessResult] = useState('');
+
+  const handleSuccess = useCallback((data: string) => {
+    setSuccessResult(prettyJSON(data));
+    setScreen('success');
+  }, []);
+
+  if (screen === 'simple') {
+    return (
+      <SimpleScreen
+        config={config}
+        onSuccess={handleSuccess}
+        onBack={() => setScreen('main')}
+      />
+    );
+  }
+
+  if (screen === 'settings') {
+    return (
+      <SettingsScreen
+        config={config}
+        onApply={(updated) => {
+          setConfig(updated);
+          setScreen('main');
+        }}
+        onBack={() => setScreen('main')}
+      />
+    );
+  }
+
+  if (screen === 'success') {
+    return (
+      <SuccessScreen result={successResult} onBack={() => setScreen('main')} />
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <ApplepayRnView color="#32a852" style={styles.box} />
-    </View>
+    <MainScreen
+      config={config}
+      onSuccess={handleSuccess}
+      onOpenSettings={() => setScreen('settings')}
+      onOpenSimple={() => setScreen('simple')}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});

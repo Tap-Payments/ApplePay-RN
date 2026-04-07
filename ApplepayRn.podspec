@@ -10,11 +10,13 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => min_ios_version_supported }
+  s.platforms    = { :ios => '16.0' }
   s.source       = { :git => "https://github.com/Tap-Payments/ApplePay-RN.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm,swift,cpp}"
+  s.source_files = "ios/**/*.{h,m,mm,swift}"
   s.private_header_files = "ios/**/*.h"
+
+  s.dependency 'ApplePay-iOS', '0.0.4'
 
   install_modules_dependencies(s)
 end
