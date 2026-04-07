@@ -30,12 +30,12 @@ ApplePay-RN provides a complete React Native wrapper around the native Apple Pay
 
 Using npm:
 ```bash
-npm install @tap-payments/applepay-rn
+npm install applepay-rn
 ```
 
 Using yarn:
 ```bash
-yarn add @tap-payments/applepay-rn
+yarn add applepay-rn
 ```
 
 ### 2. Install Pod Dependencies
@@ -46,12 +46,6 @@ Navigate to the iOS directory and install CocoaPods dependencies:
 cd ios
 pod install
 cd ..
-```
-
-### 3. Link Native Module (if not auto-linked)
-
-```bash
-npx react-native link @tap-payments/applepay-rn
 ```
 
 ## Quick Start
