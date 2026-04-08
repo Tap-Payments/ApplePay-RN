@@ -14,7 +14,9 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/Tap-Payments/ApplePay-RN.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  s.private_header_files = "ios/**/*.h"
+  
+  # Make header files public for Fabric module generation
+  s.public_header_files = "ios/ApplepayRnView.h"
 
   s.dependency 'ApplePay-iOS', '0.0.4'
 
