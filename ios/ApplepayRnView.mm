@@ -1,4 +1,5 @@
-#import "ApplepayRnView.h"
+#import <React/RCTViewComponentView.h>
+#import <UIKit/UIKit.h>
 
 #import <react/renderer/components/NativeApplePayViewSpec/ComponentDescriptors.h>
 #import <react/renderer/components/NativeApplePayViewSpec/Props.h>
@@ -9,6 +10,9 @@
 #import "ApplepayRn-Swift.h"
 
 using namespace facebook::react;
+
+@interface ApplepayRnView : RCTViewComponentView
+@end
 
 @implementation ApplepayRnView {
   ApplePayBridge * _bridge;
