@@ -3,10 +3,12 @@
   "version": "0.0.5",
   "description": "A React Native wrapper around Tap Payments’ Apple Pay iOS SDK, enabling seamless Apple Pay integration in React Native apps.",
   "main": "./lib/module/index.js",
+  "react-native": "./src/index.tsx",
   "types": "./lib/typescript/src/index.d.ts",
   "exports": {
     ".": {
       "source": "./src/index.tsx",
+      "react-native": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
       "default": "./lib/module/index.js"
     },
