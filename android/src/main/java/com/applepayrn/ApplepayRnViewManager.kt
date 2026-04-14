@@ -1,21 +1,20 @@
 package com.applepayrn
 
-import android.graphics.Color
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewManagerDelegate
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.viewmanagers.ApplepayRnViewManagerInterface
-import com.facebook.react.viewmanagers.ApplepayRnViewManagerDelegate
+import com.facebook.react.viewmanagers.NativeApplePayViewManagerInterface
+import com.facebook.react.viewmanagers.NativeApplePayViewManagerDelegate
 
 @ReactModule(name = ApplepayRnViewManager.NAME)
 class ApplepayRnViewManager : SimpleViewManager<ApplepayRnView>(),
-  ApplepayRnViewManagerInterface<ApplepayRnView> {
+  NativeApplePayViewManagerInterface<ApplepayRnView> {
   private val mDelegate: ViewManagerDelegate<ApplepayRnView>
 
   init {
-    mDelegate = ApplepayRnViewManagerDelegate(this)
+    mDelegate = NativeApplePayViewManagerDelegate(this)
   }
 
   override fun getDelegate(): ViewManagerDelegate<ApplepayRnView>? {
@@ -30,12 +29,12 @@ class ApplepayRnViewManager : SimpleViewManager<ApplepayRnView>(),
     return ApplepayRnView(context)
   }
 
-  @ReactProp(name = "color")
-  override fun setColor(view: ApplepayRnView?, color: Int?) {
-    view?.setBackgroundColor(color ?: Color.TRANSPARENT)
+  @ReactProp(name = "configuration")
+  override fun setConfiguration(view: ApplepayRnView?, value: String?) {
+    // Apple Pay is iOS-only; no-op on Android
   }
 
   companion object {
-    const val NAME = "ApplepayRnView"
+    const val NAME = "NativeApplePayView"
   }
 }
